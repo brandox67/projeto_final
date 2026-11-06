@@ -1,0 +1,16 @@
+{
+  "name": "gestao-estoque-esportivo",
+  "version": "1.0.0",
+  "description": "API RESTful para Gerenciador de Estoque e Inventário de Artigos Esportivos - SENAI PBE1",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test:bash": "bash testes_automacao.sh"
+  },
+  "dependencies": {
+    "express": "^4.22.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,218 @@
+==================================================================
+  AUDITORIA DE EXECUÇÃO DE TESTES - API ESTOQUE ESPORTIVO
+  Data e Hora de Execução: 2026-11-05 16:48:14
+==================================================================
+
+🚀 [INICIANDO BATERIA DE TESTES AUTOMATIZADOS]
+
+--------------------------------------------------
+ 1. TESTES DA ENTIDADE: CATEGORIAS
+--------------------------------------------------
+
+[POST 201] Criando Categoria: Suplementação
+{
+  "id": 4,
+  "nome": "Suplementação",
+  "descricao": "Proteínas, suplementos e pré-treinos"
+}
+
+[POST 400] Teste de Erro de Validação (Sem campo 'descricao')
+{
+  "mensagem": "Erro de Validação: Os campos 'nome' e 'descricao' são obrigatórios."
+}
+
+[GET 200] Listando todas as categorias
+[
+  {
+    "id": 1,
+    "nome": "Calçados",
+    "descricao": "Tênis de corrida, chuteiras e sapatilhas esportivas"
+  },
+  {
+    "id": 2,
+    "nome": "Vestuário",
+    "descricao": "Camisas de times, bermudas, regatas e agasalhos"
+  },
+  {
+    "id": 3,
+    "nome": "Equipamentos",
+    "descricao": "Bolas, raquetes, luvas de boxe e equipamentos de proteção"
+  },
+  {
+    "id": 4,
+    "nome": "Suplementação",
+    "descricao": "Proteínas, suplementos e pré-treinos"
+  }
+]
+
+[GET 200] Consultando Categoria por ID (ID 1)
+{
+  "id": 1,
+  "nome": "Calçados",
+  "descricao": "Tênis de corrida, chuteiras e sapatilhas esportivas"
+}
+
+[GET 404] Consultando Categoria Inexistente (ID 999)
+{
+  "mensagem": "Categoria não encontrada."
+}
+
+[PUT 200] Atualização Completa da Categoria ID 4
+{
+  "id": 4,
+  "nome": "Suplementação & Nutrição",
+  "descricao": "Proteínas, creatinas e vitaminas"
+}
+
+[PATCH 200] Atualização Parcial da Categoria ID 4
+{
+  "id": 4,
+  "nome": "Nutrição Esportiva",
+  "descricao": "Proteínas, creatinas e vitaminas"
+}
+
+[DELETE 200] Excluindo Categoria ID 4
+{
+  "mensagem": "Categoria com ID 4 removida com sucesso."
+}
+
+--------------------------------------------------
+ 2. TESTES DA ENTIDADE: PRODUTOS
+--------------------------------------------------
+
+[POST 201] Criando Produto: Luva de Boxe Venum Challenger
+{
+  "id": 4,
+  "nome": "Luva de Boxe Venum Challenger 3.0",
+  "categoriaId": 3,
+  "preco": 289.9,
+  "quantidadeEstoque": 10,
+  "marca": "Venum",
+  "status": "DISPONIVEL"
+}
+
+[POST 400] Teste de Erro de Validação de Produto (Campos ausentes)
+{
+  "mensagem": "Erro de Validação: Os campos 'nome', 'categoriaId', 'preco', 'quantidadeEstoque' e 'marca' são obrigatórios."
+}
+
+[GET 200] Listando todos os produtos esportivos
+[
+  {
+    "id": 1,
+    "nome": "Tênis Nike Air Zoom Pegasus 40",
+    "categoriaId": 1,
+    "preco": 599.9,
+    "quantidadeEstoque": 15,
+    "marca": "Nike",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 2,
+    "nome": "Camisa Seleção Brasileira 2024",
+    "categoriaId": 2,
+    "preco": 349.9,
+    "quantidadeEstoque": 25,
+    "marca": "Nike",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 3,
+    "nome": "Bola de Futebol Adidas Al Rihla",
+    "categoriaId": 3,
+    "preco": 199.9,
+    "quantidadeEstoque": 0,
+    "marca": "Adidas",
+    "status": "ESGOTADO"
+  },
+  {
+    "id": 4,
+    "nome": "Luva de Boxe Venum Challenger 3.0",
+    "categoriaId": 3,
+    "preco": 289.9,
+    "quantidadeEstoque": 10,
+    "marca": "Venum",
+    "status": "DISPONIVEL"
+  }
+]
+
+[GET 200] Filtrando Produtos via Query Parameter (marca=Nike)
+[
+  {
+    "id": 1,
+    "nome": "Tênis Nike Air Zoom Pegasus 40",
+    "categoriaId": 1,
+    "preco": 599.9,
+    "quantidadeEstoque": 15,
+    "marca": "Nike",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 2,
+    "nome": "Camisa Seleção Brasileira 2024",
+    "categoriaId": 2,
+    "preco": 349.9,
+    "quantidadeEstoque": 25,
+    "marca": "Nike",
+    "status": "DISPONIVEL"
+  }
+]
+
+[GET 200] Filtrando Produtos via Query Parameter (status=ESGOTADO)
+[
+  {
+    "id": 3,
+    "nome": "Bola de Futebol Adidas Al Rihla",
+    "categoriaId": 3,
+    "preco": 199.9,
+    "quantidadeEstoque": 0,
+    "marca": "Adidas",
+    "status": "ESGOTADO"
+  }
+]
+
+[GET 200] Buscando Produto por ID (ID 1)
+{
+  "id": 1,
+  "nome": "Tênis Nike Air Zoom Pegasus 40",
+  "categoriaId": 1,
+  "preco": 599.9,
+  "quantidadeEstoque": 15,
+  "marca": "Nike",
+  "status": "DISPONIVEL"
+}
+
+[GET 404] Buscando Produto Inexistente (ID 888)
+{
+  "mensagem": "Produto esportivo não encontrado."
+}
+
+[PUT 200] Atualizando produto ID 1 totalmente
+{
+  "id": 1,
+  "nome": "Tênis Nike Air Zoom Pegasus 40 Edição Especial",
+  "categoriaId": 1,
+  "preco": 649.9,
+  "quantidadeEstoque": 20,
+  "marca": "Nike",
+  "status": "DISPONIVEL"
+}
+
+[PATCH 200] Atualizando estoque do produto ID 1 via PATCH
+{
+  "id": 1,
+  "nome": "Tênis Nike Air Zoom Pegasus 40 Edição Especial",
+  "categoriaId": 1,
+  "preco": 649.9,
+  "quantidadeEstoque": 0,
+  "marca": "Nike",
+  "status": "ESGOTADO"
+}
+
+[DELETE 200] Excluindo produto ID 4
+{
+  "mensagem": "Produto com ID 4 removido do estoque com sucesso."
+}
+
+✅ [TESTES FINALIZADOS] Log salvo em: resultado_execucao.log
+
