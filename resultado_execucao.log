@@ -1,27 +1,13 @@
 ==================================================================
-  AUDITORIA DE EXECUÇÃO DE TESTES - API ESTOQUE ESPORTIVO
-  Data e Hora de Execução: 2026-11-05 16:48:14
+ AUDITORIA AUTOMATIZADA DE API RESTFUL - ESTOQUE ESPORTIVO
+ Data/Hora: 12/11/2026 17:17:08
 ==================================================================
 
-🚀 [INICIANDO BATERIA DE TESTES AUTOMATIZADOS]
-
---------------------------------------------------
- 1. TESTES DA ENTIDADE: CATEGORIAS
---------------------------------------------------
-
-[POST 201] Criando Categoria: Suplementação
-{
-  "id": 4,
-  "nome": "Suplementação",
-  "descricao": "Proteínas, suplementos e pré-treinos"
-}
-
-[POST 400] Teste de Erro de Validação (Sem campo 'descricao')
-{
-  "mensagem": "Erro de Validação: Os campos 'nome' e 'descricao' são obrigatórios."
-}
-
-[GET 200] Listando todas as categorias
+>>> 1. TESTES DE CATEGORIAS
+------------------------------------------------------------------
+[GET] http://localhost:3027/api/categorias
+Status HTTP: 200
+Resposta:
 [
   {
     "id": 1,
@@ -40,63 +26,52 @@
   },
   {
     "id": 4,
-    "nome": "Suplementação",
-    "descricao": "Proteínas, suplementos e pré-treinos"
+    "nome": "Acessórios",
+    "descricao": "Mochilas, garrafas térmicas, meias e munhequeiras"
   }
 ]
-
-[GET 200] Consultando Categoria por ID (ID 1)
+------------------------------------------------------------------
+[POST] http://localhost:3027/api/categorias
+Payload: {"nome":"Suplementos","descricao":"Proteínas, creatinas e isotônicos esportivos"}
+Status HTTP: 201
+Resposta:
 {
-  "id": 1,
-  "nome": "Calçados",
-  "descricao": "Tênis de corrida, chuteiras e sapatilhas esportivas"
+  "id": 5,
+  "nome": "Suplementos",
+  "descricao": "Proteínas, creatinas e isotônicos esportivos"
+}
+------------------------------------------------------------------
+[GET] http://localhost:3027/api/categorias/5
+Status HTTP: 200
+Resposta:
+{
+  "id": 5,
+  "nome": "Suplementos",
+  "descricao": "Proteínas, creatinas e isotônicos esportivos"
+}
+------------------------------------------------------------------
+[PATCH] http://localhost:3027/api/categorias/5
+Payload: {"descricao":"Suplementos nutricionais e energéticos"}
+Status HTTP: 200
+Resposta:
+{
+  "id": 5,
+  "nome": "Suplementos",
+  "descricao": "Suplementos nutricionais e energéticos"
+}
+------------------------------------------------------------------
+[DELETE] http://localhost:3027/api/categorias/5
+Status HTTP: 200
+Resposta:
+{
+  "mensagem": "Categoria com ID 5 removida com sucesso."
 }
 
-[GET 404] Consultando Categoria Inexistente (ID 999)
-{
-  "mensagem": "Categoria não encontrada."
-}
-
-[PUT 200] Atualização Completa da Categoria ID 4
-{
-  "id": 4,
-  "nome": "Suplementação & Nutrição",
-  "descricao": "Proteínas, creatinas e vitaminas"
-}
-
-[PATCH 200] Atualização Parcial da Categoria ID 4
-{
-  "id": 4,
-  "nome": "Nutrição Esportiva",
-  "descricao": "Proteínas, creatinas e vitaminas"
-}
-
-[DELETE 200] Excluindo Categoria ID 4
-{
-  "mensagem": "Categoria com ID 4 removida com sucesso."
-}
-
---------------------------------------------------
- 2. TESTES DA ENTIDADE: PRODUTOS
---------------------------------------------------
-
-[POST 201] Criando Produto: Luva de Boxe Venum Challenger
-{
-  "id": 4,
-  "nome": "Luva de Boxe Venum Challenger 3.0",
-  "categoriaId": 3,
-  "preco": 289.9,
-  "quantidadeEstoque": 10,
-  "marca": "Venum",
-  "status": "DISPONIVEL"
-}
-
-[POST 400] Teste de Erro de Validação de Produto (Campos ausentes)
-{
-  "mensagem": "Erro de Validação: Os campos 'nome', 'categoriaId', 'preco', 'quantidadeEstoque' e 'marca' são obrigatórios."
-}
-
-[GET 200] Listando todos os produtos esportivos
+>>> 2. LISTAGEM E FILTROS DE PRODUTOS
+------------------------------------------------------------------
+[GET] http://localhost:3027/api/produtos
+Status HTTP: 200
+Resposta:
 [
   {
     "id": 1,
@@ -109,6 +84,24 @@
   },
   {
     "id": 2,
+    "nome": "Chuteira Adidas Predator Edge",
+    "categoriaId": 1,
+    "preco": 449.9,
+    "quantidadeEstoque": 8,
+    "marca": "Adidas",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 3,
+    "nome": "Tênis Mizuno Wave Creation 24",
+    "categoriaId": 1,
+    "preco": 899.9,
+    "quantidadeEstoque": 4,
+    "marca": "Mizuno",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 4,
     "nome": "Camisa Seleção Brasileira 2024",
     "categoriaId": 2,
     "preco": 349.9,
@@ -117,7 +110,25 @@
     "status": "DISPONIVEL"
   },
   {
-    "id": 3,
+    "id": 5,
+    "nome": "Bermuda Esportiva Puma Dry",
+    "categoriaId": 2,
+    "preco": 129.9,
+    "quantidadeEstoque": 12,
+    "marca": "Puma",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 6,
+    "nome": "Agasalho Corta-Vento Adidas",
+    "categoriaId": 2,
+    "preco": 279.9,
+    "quantidadeEstoque": 0,
+    "marca": "Adidas",
+    "status": "ESGOTADO"
+  },
+  {
+    "id": 7,
     "nome": "Bola de Futebol Adidas Al Rihla",
     "categoriaId": 3,
     "preco": 199.9,
@@ -126,17 +137,55 @@
     "status": "ESGOTADO"
   },
   {
-    "id": 4,
+    "id": 8,
     "nome": "Luva de Boxe Venum Challenger 3.0",
     "categoriaId": 3,
     "preco": 289.9,
     "quantidadeEstoque": 10,
     "marca": "Venum",
     "status": "DISPONIVEL"
+  },
+  {
+    "id": 9,
+    "nome": "Raquete de Tênis Wilson Pro Staff",
+    "categoriaId": 3,
+    "preco": 1199.9,
+    "quantidadeEstoque": 3,
+    "marca": "Wilson",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 10,
+    "nome": "Mochila Esportiva Nike Brasilia",
+    "categoriaId": 4,
+    "preco": 219.9,
+    "quantidadeEstoque": 18,
+    "marca": "Nike",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 11,
+    "nome": "Garrafa Térmica Under Armour 1L",
+    "categoriaId": 4,
+    "preco": 119.9,
+    "quantidadeEstoque": 30,
+    "marca": "Under Armour",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 12,
+    "nome": "Caneleira Futebol Puma Ultra",
+    "categoriaId": 4,
+    "preco": 79.9,
+    "quantidadeEstoque": 14,
+    "marca": "Puma",
+    "status": "DISPONIVEL"
   }
 ]
-
-[GET 200] Filtrando Produtos via Query Parameter (marca=Nike)
+------------------------------------------------------------------
+[GET] http://localhost:3027/api/produtos?categoriaId=1
+Status HTTP: 200
+Resposta:
 [
   {
     "id": 1,
@@ -149,19 +198,39 @@
   },
   {
     "id": 2,
-    "nome": "Camisa Seleção Brasileira 2024",
-    "categoriaId": 2,
-    "preco": 349.9,
-    "quantidadeEstoque": 25,
-    "marca": "Nike",
+    "nome": "Chuteira Adidas Predator Edge",
+    "categoriaId": 1,
+    "preco": 449.9,
+    "quantidadeEstoque": 8,
+    "marca": "Adidas",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 3,
+    "nome": "Tênis Mizuno Wave Creation 24",
+    "categoriaId": 1,
+    "preco": 899.9,
+    "quantidadeEstoque": 4,
+    "marca": "Mizuno",
     "status": "DISPONIVEL"
   }
 ]
-
-[GET 200] Filtrando Produtos via Query Parameter (status=ESGOTADO)
+------------------------------------------------------------------
+[GET] http://localhost:3027/api/produtos?status=ESGOTADO
+Status HTTP: 200
+Resposta:
 [
   {
-    "id": 3,
+    "id": 6,
+    "nome": "Agasalho Corta-Vento Adidas",
+    "categoriaId": 2,
+    "preco": 279.9,
+    "quantidadeEstoque": 0,
+    "marca": "Adidas",
+    "status": "ESGOTADO"
+  },
+  {
+    "id": 7,
     "nome": "Bola de Futebol Adidas Al Rihla",
     "categoriaId": 3,
     "preco": 199.9,
@@ -170,49 +239,146 @@
     "status": "ESGOTADO"
   }
 ]
+------------------------------------------------------------------
+[GET] http://localhost:3027/api/produtos?nome=tenis
+Status HTTP: 200
+Resposta:
+[]
+------------------------------------------------------------------
+[GET] http://localhost:3027/api/produtos?precoMax=250
+Status HTTP: 200
+Resposta:
+[
+  {
+    "id": 5,
+    "nome": "Bermuda Esportiva Puma Dry",
+    "categoriaId": 2,
+    "preco": 129.9,
+    "quantidadeEstoque": 12,
+    "marca": "Puma",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 7,
+    "nome": "Bola de Futebol Adidas Al Rihla",
+    "categoriaId": 3,
+    "preco": 199.9,
+    "quantidadeEstoque": 0,
+    "marca": "Adidas",
+    "status": "ESGOTADO"
+  },
+  {
+    "id": 10,
+    "nome": "Mochila Esportiva Nike Brasilia",
+    "categoriaId": 4,
+    "preco": 219.9,
+    "quantidadeEstoque": 18,
+    "marca": "Nike",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 11,
+    "nome": "Garrafa Térmica Under Armour 1L",
+    "categoriaId": 4,
+    "preco": 119.9,
+    "quantidadeEstoque": 30,
+    "marca": "Under Armour",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 12,
+    "nome": "Caneleira Futebol Puma Ultra",
+    "categoriaId": 4,
+    "preco": 79.9,
+    "quantidadeEstoque": 14,
+    "marca": "Puma",
+    "status": "DISPONIVEL"
+  }
+]
 
-[GET 200] Buscando Produto por ID (ID 1)
+>>> 3. CRUD COMPLETO DE PRODUTO (ID 13)
+------------------------------------------------------------------
+[POST] http://localhost:3027/api/produtos
+Payload: {"nome":"Tênis Asics Gel-Nimbus 26","categoriaId":1,"preco":999.90,"quantidadeEstoque":7,"marca":"Asics"}
+Status HTTP: 201
+Resposta:
 {
-  "id": 1,
-  "nome": "Tênis Nike Air Zoom Pegasus 40",
+  "id": 13,
+  "nome": "Tênis Asics Gel-Nimbus 26",
   "categoriaId": 1,
-  "preco": 599.9,
-  "quantidadeEstoque": 15,
-  "marca": "Nike",
+  "preco": 999.9,
+  "quantidadeEstoque": 7,
+  "marca": "Asics",
   "status": "DISPONIVEL"
 }
+------------------------------------------------------------------
+[GET] http://localhost:3027/api/produtos/13
+Status HTTP: 200
+Resposta:
+{
+  "id": 13,
+  "nome": "Tênis Asics Gel-Nimbus 26",
+  "categoriaId": 1,
+  "preco": 999.9,
+  "quantidadeEstoque": 7,
+  "marca": "Asics",
+  "status": "DISPONIVEL"
+}
+------------------------------------------------------------------
+[PUT] http://localhost:3027/api/produtos/13
+Payload: {"nome":"Tênis Asics Gel-Nimbus 26 Edição Especial","categoriaId":1,"preco":1049.90,"quantidadeEstoque":5,"marca":"Asics","status":"DISPONIVEL"}
+Status HTTP: 200
+Resposta:
+{
+  "id": 13,
+  "nome": "Tênis Asics Gel-Nimbus 26 Edição Especial",
+  "categoriaId": 1,
+  "preco": 1049.9,
+  "quantidadeEstoque": 5,
+  "marca": "Asics",
+  "status": "DISPONIVEL"
+}
+------------------------------------------------------------------
+[PATCH] http://localhost:3027/api/produtos/13
+Payload: {"quantidadeEstoque":0}
+Status HTTP: 200
+Resposta:
+{
+  "id": 13,
+  "nome": "Tênis Asics Gel-Nimbus 26 Edição Especial",
+  "categoriaId": 1,
+  "preco": 1049.9,
+  "quantidadeEstoque": 0,
+  "marca": "Asics",
+  "status": "ESGOTADO"
+}
 
-[GET 404] Buscando Produto Inexistente (ID 888)
+>>> 4. TESTES DE VALIDAÇÃO E ERROS
+------------------------------------------------------------------
+[POST] http://localhost:3027/api/produtos
+Payload: {"nome":"Produto Inválido","categoriaId":1,"preco":-50,"quantidadeEstoque":10,"marca":"Teste"}
+Status HTTP: 400
+Resposta:
+{
+  "mensagem": "Erro de Validação: Preço e quantidade em estoque não podem ser negativos."
+}
+------------------------------------------------------------------
+[GET] http://localhost:3027/api/produtos/999
+Status HTTP: 404
+Resposta:
 {
   "mensagem": "Produto esportivo não encontrado."
 }
 
-[PUT 200] Atualizando produto ID 1 totalmente
+>>> 5. LIMPEZA DO ITEM DE TESTE
+------------------------------------------------------------------
+[DELETE] http://localhost:3027/api/produtos/13
+Status HTTP: 200
+Resposta:
 {
-  "id": 1,
-  "nome": "Tênis Nike Air Zoom Pegasus 40 Edição Especial",
-  "categoriaId": 1,
-  "preco": 649.9,
-  "quantidadeEstoque": 20,
-  "marca": "Nike",
-  "status": "DISPONIVEL"
+  "mensagem": "Produto com ID 13 removido do estoque com sucesso."
 }
 
-[PATCH 200] Atualizando estoque do produto ID 1 via PATCH
-{
-  "id": 1,
-  "nome": "Tênis Nike Air Zoom Pegasus 40 Edição Especial",
-  "categoriaId": 1,
-  "preco": 649.9,
-  "quantidadeEstoque": 0,
-  "marca": "Nike",
-  "status": "ESGOTADO"
-}
-
-[DELETE 200] Excluindo produto ID 4
-{
-  "mensagem": "Produto com ID 4 removido do estoque com sucesso."
-}
-
-✅ [TESTES FINALIZADOS] Log salvo em: resultado_execucao.log
-
+==================================================================
+ FIM DA EXECUÇÃO - LOG SALVO EM: resultado_execucao.log
+==================================================================
