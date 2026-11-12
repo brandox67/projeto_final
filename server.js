@@ -106,7 +106,7 @@ app.delete('/api/categorias/:id', (req, res) => {
 // ==========================================
 app.get('/api/produtos', (req, res) => {
   let resultado = [...produtos];
-  const { categoriaId, status, marca } = req.query;
+  const { categoriaId, status, marca, nome, precoMax } = req.query;
 
   if (categoriaId) {
     resultado = resultado.filter(p => p.categoriaId === parseInt(categoriaId));
@@ -117,6 +117,13 @@ app.get('/api/produtos', (req, res) => {
   if (marca) {
     resultado = resultado.filter(p => p.marca.toLowerCase() === marca.toLowerCase());
   }
+  if (nome) {
+    resultado = resultado.filter(p => p.nome.toLowerCase().includes(nome.toLowerCase()));
+  }
+  if (precoMax) {
+    resultado = resultado.filter(p => p.preco <= parseFloat(precoMax));
+  }
+
   return res.status(200).json(resultado);
 });
 
@@ -134,6 +141,11 @@ app.post('/api/produtos', (req, res) => {
   if (!nome || categoriaId === undefined || preco === undefined || quantidadeEstoque === undefined || !marca) {
     return res.status(400).json({
       mensagem: "Erro de Validação: Os campos 'nome', 'categoriaId', 'preco', 'quantidadeEstoque' e 'marca' são obrigatórios."
+    });
+  }
+  if (parseFloat(preco) < 0 || parseInt(quantidadeEstoque) < 0) {
+    return res.status(400).json({
+      mensagem: "Erro de Validação: Preço e quantidade em estoque não podem ser negativos."
     });
   }
   const categoriaExiste = categorias.some(c => c.id === parseInt(categoriaId));
@@ -165,6 +177,11 @@ app.put('/api/produtos/:id', (req, res) => {
       mensagem: "Erro de Validação: Os campos 'nome', 'categoriaId', 'preco', 'quantidadeEstoque' e 'marca' são obrigatórios."
     });
   }
+  if (parseFloat(preco) < 0 || parseInt(quantidadeEstoque) < 0) {
+    return res.status(400).json({
+      mensagem: "Erro de Validação: Preço e quantidade em estoque não podem ser negativos."
+    });
+  }
   produtos[index] = {
     id,
     nome,
@@ -184,6 +201,11 @@ app.patch('/api/produtos/:id', (req, res) => {
     return res.status(404).json({ mensagem: "Produto esportivo não encontrado." });
   }
   const { nome, categoriaId, preco, quantidadeEstoque, marca, status } = req.body;
+  if ((preco !== undefined && parseFloat(preco) < 0) || (quantidadeEstoque !== undefined && parseInt(quantidadeEstoque) < 0)) {
+    return res.status(400).json({
+      mensagem: "Erro de Validação: Preço e quantidade em estoque não podem ser negativos."
+    });
+  }
   if (nome !== undefined) produto.nome = nome;
   if (categoriaId !== undefined) produto.categoriaId = parseInt(categoriaId);
   if (preco !== undefined) produto.preco = parseFloat(preco);
